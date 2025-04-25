@@ -76,4 +76,55 @@ export class UsuarioService {
     async obtenerUsuario(){
         return this._userRepo.find();
     }
+
+    async update(updateUserDto: UpdateUserDto){
+        try {
+            //validamos si existe el usuario
+            const existeUsuario = await this._userRepo.findOne({
+                where: [
+                    { id_usuario: updateUserDto.id_usuario}
+                ],
+            });
+
+            if(existeUsuario === null){
+                throw new HttpException(`El usuario no existe`, HttpStatus.NOT_FOUND);
+            }
+            
+            const usuarioActualizado = this._userRepo.merge(existeUsuario, updateUserDto);
+
+            //Guardamos resultado
+            const response = await this._userRepo.save(usuarioActualizado);
+
+            return plainToInstance(ReadUserDto, response);
+        } catch (error) {
+            
+        }
+    }
+
+    async delete(id_usuario: number){
+        try {
+            //validamos si existe el usuario
+            const existeUsuario = await this._userRepo.findOne({
+                where: [
+                    { id_usuario: id_usuario}
+                ],
+            });
+
+            if(existeUsuario === null){
+                throw new HttpException(`El usuario no existe`, HttpStatus.NOT_FOUND);
+            }
+
+            const response = await this._userRepo.delete(id_usuario);
+
+            if (response.affected === 0) {
+                throw new HttpException(`Error al eliminar el usuario`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            return { message: `Usuario eliminado correctamente` };
+
+            return response;
+        } catch (error) {
+            
+        }
+    }
 }

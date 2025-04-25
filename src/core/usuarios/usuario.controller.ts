@@ -1,6 +1,6 @@
 import { Controller, Post, Get, Put, Delete, Param, Body  } from "@nestjs/common"; 
 import { UsuarioService } from "./usuario.service"
-import { CreateUserDto, ReadUserDto } from "./dto";
+import { CreateUserDto, ReadUserDto, UpdateUserDto } from "./dto";
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiFoundResponse, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 /*
 @Controller('usuarios')
@@ -49,5 +49,15 @@ export class UsuarioController {
     @Get()
     obtenerUsuario(){
         return this.userService.obtenerUsuario();
+    }
+
+    @Put(':id')
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+        return this.userService.update(updateUserDto);
+    }
+
+    @Delete(':id')
+    delete(@Param('id') id: string) {
+        return this.userService.delete(Number(id));
     }
 }
