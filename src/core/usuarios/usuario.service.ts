@@ -72,4 +72,8 @@ export class UsuarioService {
             throw error;
         }
     }
+
+    async obtenerUsuario(){
+        return this._userRepo.find();
+    }
 }

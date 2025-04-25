@@ -1,9 +1,11 @@
 import { createHash } from "crypto";
 
-const btoa = (text:string) => Buffer.from(text, 'binary').toString('base64');
+const btoa = (text: string) => Buffer.from(text, 'binary').toString('base64');
 const atob = (base64: string) => Buffer.from(base64, 'base64').toString('binary');
 
-const key = "secretKey";
+// ✅ Corrección aquí:
+const rawKey = process.env.SECRET_KEY || 'default_secret_key';
+const key = rawKey.length > 0 ? rawKey : 'default_secret_key';
 
 export const encrypt = (source: string) => {
     let result = '';
@@ -13,7 +15,7 @@ export const encrypt = (source: string) => {
 
     for (let i = 0; i < source.length; i++) {
         char = source.charAt(i);
-        keychar = key.substr((i % key.length) - 1, 1);
+        keychar = key.charAt(i % key.length);
         charOut = String.fromCharCode(char.charCodeAt(0) + keychar.charCodeAt(0));
         result += charOut;
     }
@@ -29,7 +31,7 @@ export const decrypt = (source: string) => {
 
     for (let i = 0; i < decriptedSource.length; i++) {
         char = decriptedSource.charAt(i);
-        keychar = key.substr((i % key.length) - 1, 1);
+        keychar = key.charAt(i % key.length);
         char = String.fromCharCode(char.charCodeAt(0) - keychar.charCodeAt(0));
         result += char;
     }

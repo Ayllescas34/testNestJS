@@ -57,7 +57,7 @@ export class Usuario {
     @Column({
         nullable: false,
         type: 'varchar',
-        length: '75',
+        length: '150',
         comment: 'Contraseña de usuario'
     })
     contrasena: string;
@@ -71,3 +71,4 @@ export class Usuario {
     })
     status: boolean;
 }
+

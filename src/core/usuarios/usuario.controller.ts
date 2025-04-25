@@ -45,4 +45,9 @@ export class UsuarioController {
     create(@Body() createUserDto: CreateUserDto) {
         return this.userService.create(createUserDto);
     }
+
+    @Get()
+    obtenerUsuario(){
+        return this.userService.obtenerUsuario();
+    }
 }
